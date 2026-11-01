@@ -11,12 +11,12 @@ services:
         value: production
       - key: MONGO_URI
         sync: false
-      - key: RPC_URL
-        sync: false
-      - key: PUBLIC_RPC_URL
-        sync: false
       - key: CHAIN_ID
-        sync: false
+        value: "84532"
+      - key: RPC_URL
+        value: https://sepolia.base.org
+      - key: PUBLIC_RPC_URL
+        value: https://sepolia.base.org
       - key: CONTRACT_ADDRESS
         sync: false
       - key: PLATE_SALT

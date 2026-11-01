@@ -104,7 +104,7 @@ This project includes [`render.yaml`](render.yaml) for a single **free-tier** No
 
 1. Push the project to the GitHub repository you intend to deploy from. Use a private repository if the source or operational details should not be public; never commit credentials or secrets.
 2. In Render, create a Blueprint from that repository and confirm the service is on the free plan before creating it. A free Render service does not make MongoDB Atlas, RPC-provider usage, or blockchain gas fees free.
-3. Set the Blueprint's `MONGO_URI`, server-side `RPC_URL`, browser-accessible `PUBLIC_RPC_URL`, `CHAIN_ID`, `CONTRACT_ADDRESS`, `ADMIN_USER`, `ADMIN_PASS`, `GUARD_USER`, and `GUARD_PASS` values in Render's environment settings. Use a public RPC URL intended for browser use; do not expose a server-only RPC credential.
+3. The blueprint defaults to Base Sepolia (`CHAIN_ID=84532`) and the public `https://sepolia.base.org` endpoint. Set `MONGO_URI`, `CONTRACT_ADDRESS`, `ADMIN_USER`, `ADMIN_PASS`, `GUARD_USER`, and `GUARD_PASS` in Render's private environment settings. If using a provider-specific RPC, set `RPC_URL` and `PUBLIC_RPC_URL` separately; never expose a server-only RPC credential as `PUBLIC_RPC_URL`.
 4. Use unique usernames, passwords at least 12 characters long, and keep the generated `PLATE_SALT` / `JWT_SECRET`. In MongoDB Atlas, grant the app's network access and a least-privilege database user.
 5. Deploy and wait for `/api/health` to report healthy. Open the Render URL, install/connect MetaMask, and switch to the exact chain used for the contract.
 

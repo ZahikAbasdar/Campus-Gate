@@ -152,7 +152,11 @@ export default function App() {
             <span className="welcome-icon"><Icon name={page === pages.gate ? "gate" : page === pages.admin ? "car" : page === pages.logs ? "history" : "verify"} size={24} /></span>
           </div>
 
-          {walletMessage && <p className={`wallet-message ${wallet ? "good" : "bad"}`} role="status">{walletMessage}</p>}
+          {walletMessage && <p className={`wallet-message ${wallet ? "good" : "bad"}`} role="status">
+            {walletMessage === "Install the MetaMask browser extension first" ? (
+              <>MetaMask isn’t available in this browser. <a href="https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank" rel="noreferrer">Install MetaMask from the Chrome Web Store</a>, then reload this page.</>
+            ) : walletMessage}
+          </p>}
           {wallet && <p className="wallet-message good" role="status">
             Network roles: {wallet.isAdmin ? "administrator" : "not administrator"} · {wallet.isGuard ? "gate guard" : "not gate guard"}
           </p>}

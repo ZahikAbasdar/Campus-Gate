@@ -84,7 +84,7 @@ Verify the selected network, wallet address, contract address, and deployment tr
 
 This project includes [`render.yaml`](render.yaml) for a single Node web service that builds the Solidity ABI and frontend, serves the app and API together, and checks `/api/health`.
 
-1. Push the project to a **private** GitHub repository.
+1. Push the project to the GitHub repository you intend to deploy from. Use a private repository if the source or operational details should not be public; never commit credentials or secrets.
 2. In Render, create a Blueprint from that repository and review the service plan and cost before creating it.
 3. Set the Blueprint's `MONGO_URI`, server-side `RPC_URL`, browser-accessible `PUBLIC_RPC_URL`, `CHAIN_ID`, `CONTRACT_ADDRESS`, `ADMIN_USER`, `ADMIN_PASS`, `GUARD_USER`, and `GUARD_PASS` values in Render's environment settings. Use a public RPC URL intended for browser use; do not expose a server-only RPC credential.
 4. Use unique usernames, passwords at least 12 characters long, and keep the generated `PLATE_SALT` / `JWT_SECRET`. In MongoDB Atlas, grant the app's network access and a least-privilege database user.

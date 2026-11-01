@@ -100,10 +100,10 @@ Verify the selected network, wallet address, contract address, and deployment tr
 
 ## Deploying to Render
 
-This project includes [`render.yaml`](render.yaml) for a single Node web service that builds the Solidity ABI and frontend, serves the app and API together, and checks `/api/health`.
+This project includes [`render.yaml`](render.yaml) for a single **free-tier** Node web service that builds the Solidity ABI and frontend, serves the app and API together, and checks `/api/health`. Free instances may sleep when idle and cold-start on the next visit, have limited monthly resources, and do not provide persistent local storage. Treat this as a test deployment, not a production availability guarantee. Render plan limits can change; confirm current terms in the dashboard.
 
 1. Push the project to the GitHub repository you intend to deploy from. Use a private repository if the source or operational details should not be public; never commit credentials or secrets.
-2. In Render, create a Blueprint from that repository and review the service plan and cost before creating it.
+2. In Render, create a Blueprint from that repository and confirm the service is on the free plan before creating it. A free Render service does not make MongoDB Atlas, RPC-provider usage, or blockchain gas fees free.
 3. Set the Blueprint's `MONGO_URI`, server-side `RPC_URL`, browser-accessible `PUBLIC_RPC_URL`, `CHAIN_ID`, `CONTRACT_ADDRESS`, `ADMIN_USER`, `ADMIN_PASS`, `GUARD_USER`, and `GUARD_PASS` values in Render's environment settings. Use a public RPC URL intended for browser use; do not expose a server-only RPC credential.
 4. Use unique usernames, passwords at least 12 characters long, and keep the generated `PLATE_SALT` / `JWT_SECRET`. In MongoDB Atlas, grant the app's network access and a least-privilege database user.
 5. Deploy and wait for `/api/health` to report healthy. Open the Render URL, install/connect MetaMask, and switch to the exact chain used for the contract.

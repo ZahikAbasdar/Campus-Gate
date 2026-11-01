@@ -81,10 +81,31 @@ async function getSuccessfulTransaction(txHash) {
 }
 
 app.get("/api/wallet/config", (_req, res) => {
+  const chainId = Number(process.env.CHAIN_ID || 31337);
+  const chainMetadata = {
+    31337: {
+      chainName: "Hardhat Local",
+      nativeCurrency: { name: "Test Ether", symbol: "ETH", decimals: 18 },
+    },
+    84532: {
+      chainName: "Base Sepolia",
+      nativeCurrency: { name: "Sepolia Ether", symbol: "ETH", decimals: 18 },
+      blockExplorerUrls: ["https://sepolia.basescan.org"],
+    },
+    8453: {
+      chainName: "Base",
+      nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+      blockExplorerUrls: ["https://basescan.org"],
+    },
+  };
   res.json({
     address,
     abi,
-    chainId: Number(process.env.CHAIN_ID || 31337),
+    chainId,
+    ...(chainMetadata[chainId] || {
+      chainName: `EVM chain ${chainId}`,
+      nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+    }),
     rpcUrl: process.env.PUBLIC_RPC_URL || process.env.RPC_URL || "http://127.0.0.1:8545",
   });
 });

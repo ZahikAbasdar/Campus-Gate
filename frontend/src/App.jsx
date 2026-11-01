@@ -43,9 +43,10 @@ async function connectMetaMask() {
       method: "wallet_addEthereumChain",
       params: [{
         chainId,
-        chainName: "Hardhat Local",
-        nativeCurrency: { name: "Test Ether", symbol: "ETH", decimals: 18 },
+        chainName: config.chainName,
+        nativeCurrency: config.nativeCurrency,
         rpcUrls: [config.rpcUrl],
+        ...(config.blockExplorerUrls ? { blockExplorerUrls: config.blockExplorerUrls } : {}),
       }],
     });
   }

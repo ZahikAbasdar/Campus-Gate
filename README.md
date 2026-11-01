@@ -63,6 +63,24 @@ Open `http://localhost:5173`. Connect the MetaMask account configured as `METAMA
 
 For local development only, the example credentials are `admin` / `admin123` and `guard` / `guard123`. Replace them before any shared or hosted deployment.
 
+## Test deployment on Base Sepolia
+
+Base Sepolia is a public EVM test network (chain ID `84532`); you do not create the network. Test ETH has no real-world value. Do not use a wallet or private key that holds real funds.
+
+1. Create a separate MetaMask account for testing and copy only its public address into `METAMASK_ADDRESS`.
+2. Get a Base Sepolia RPC endpoint from your provider, or use `https://sepolia.base.org` for local testing. Put it in `RPC_URL` and `PUBLIC_RPC_URL`. The public URL is sent to the browser, so never put a private or privileged API key in `PUBLIC_RPC_URL`.
+3. Set `CHAIN_ID=84532` in `backend\.env`. Keep the test deployer private key only in this ignored local file; never share it or commit it.
+4. Fund the test account with Base Sepolia ETH from a faucet. Test ETH has no monetary value; faucet availability and eligibility may change.
+5. Deploy the test contract:
+
+   ```powershell
+   npm run deploy:configured
+   ```
+
+6. Copy the printed contract address into `CONTRACT_ADDRESS`, then start the backend. MetaMask will be prompted to add/switch to Base Sepolia when connecting.
+
+This deployment is for testing only. A Base Sepolia contract is separate from Base Mainnet and cannot be used there. Before any real deployment, select a mainnet deliberately, use its RPC and chain ID, rotate any exposed credentials, and review hosting costs.
+
 ## Deploying a real contract
 
 Choose the EVM network deliberately and use its official RPC provider. A public-chain deployment is permanent and requires real funds for gas.

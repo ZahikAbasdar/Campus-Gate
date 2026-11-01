@@ -1,0 +1,8 @@
+backend/.env
+node_modules
+artifacts
+cache
+frontend/dist
+.env
+backend/contract.json
+types/

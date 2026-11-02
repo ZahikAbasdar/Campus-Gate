@@ -2,7 +2,7 @@
   "name": "campus-gate-chain",
   "version": "1.0.0",
   "type": "module",
-  "engines": { "node": "^20.19.0 || >=22.12.0" },
+  "engines": { "node": ">=22.13.0" },
   "scripts": {
     "build": "npm run compile && npm run build --prefix frontend",
     "start": "npm start --prefix backend",

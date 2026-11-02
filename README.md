@@ -75,7 +75,7 @@ The supplied originals are preserved in the ignored `docs/screenshots/local-only
 
 ## Requirements
 
-- Node.js 22.12 or newer
+- Node.js 22.13 or newer
 - MongoDB (local or Atlas)
 - MetaMask
 - A compatible EVM RPC endpoint and funded deployer account for the network you select

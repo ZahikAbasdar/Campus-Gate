@@ -1,14 +1,68 @@
 # Campus Gate
 
-A campus vehicle access system with a React interface, Express/MongoDB API, MetaMask-signed transactions, and a Solidity audit log.
+<p align="center">
+  <strong>Access, in harmony.</strong><br>
+  A considered campus vehicle-access experience, backed by a verifiable on-chain movement log.
+</p>
 
-## Screenshots
+<p align="center">
+  <a href="docs/videos/campus-gate-demo.webm"><strong>▶ Watch the local demo walkthrough</strong></a>
+</p>
 
-| Secure sign-in | Gate operations |
-|---|---|
-| ![Campus Gate sign-in](docs/screenshots/login.png) | ![Campus Gate dashboard](docs/screenshots/dashboard.png) |
+<p align="center">
+  <img src="docs/screenshots/demo-02-admin-gate-activity.png" alt="Campus Gate operations dashboard with fictional demo vehicles" width="880">
+</p>
+
+> **Demo note:** The walkthrough and 12 generated screenshots use an isolated local Hardhat chain, a separate local MongoDB database, and fictional records. This is a local test demonstration, not a live or production deployment.
+
+## Product gallery
 
 The interface adapts to mobile screens and honors the operating system's reduced-motion preference.
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/demo-01-sign-in.png" alt="Secure sign-in screen" width="420"><br><sub>01 · Secure sign-in</sub></td>
+    <td><img src="docs/screenshots/demo-02-admin-gate-activity.png" alt="Administrator gate activity with fictional vehicles currently on campus" width="420"><br><sub>02 · Administrator gate activity</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/demo-03-vehicle-registry.png" alt="Vehicle registration form" width="420"><br><sub>03 · Vehicle registry</sub></td>
+    <td><img src="docs/screenshots/demo-04-movement-history.png" alt="Fictional vehicle movement history" width="420"><br><sub>04 · Movement history</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/demo-05-filtered-activity.png" alt="Filtered vehicle movement search results" width="420"><br><sub>05 · Filtered activity search</sub></td>
+    <td><img src="docs/screenshots/demo-06-verification-form.png" alt="Ledger record verification form" width="420"><br><sub>06 · Ledger verification</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/demo-07-verified-record.png" alt="Successful comparison of a fictional database record and blockchain entry" width="420"><br><sub>07 · Verified ledger record</sub></td>
+    <td><img src="docs/screenshots/demo-08-guard-gate-view.png" alt="Gate guard workspace" width="420"><br><sub>08 · Guard workspace</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/demo-09-guard-movement-history.png" alt="Gate guard movement history" width="420"><br><sub>09 · Guard movement history</sub></td>
+    <td><img src="docs/screenshots/demo-10-mobile-gate.png" alt="Responsive gate operations on a mobile screen" width="420"><br><sub>10 · Mobile gate operations</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/demo-11-mobile-history.png" alt="Responsive movement history on a mobile screen" width="420"><br><sub>11 · Mobile movement history</sub></td>
+    <td><img src="docs/screenshots/demo-12-mobile-verification.png" alt="Successful ledger verification on a mobile screen" width="420"><br><sub>12 · Mobile ledger verification</sub></td>
+  </tr>
+</table>
+
+## Supplied reference screenshots
+
+The supplied originals are preserved in the ignored `docs/screenshots/local-only/` folder. These gallery copies mask wallet/account details, vehicle identifiers, owner details, and balances before publication.
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/provided-gate-activity.png" alt="Supplied gate activity screenshot" width="420"><br><sub>Gate activity</sub></td>
+    <td><img src="docs/screenshots/provided-movement-history.png" alt="Supplied movement history screenshot" width="420"><br><sub>Movement history</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/provided-ledger-verification.png" alt="Supplied ledger verification screenshot" width="420"><br><sub>Ledger verification</sub></td>
+    <td><img src="docs/screenshots/provided-metamask-activity.png" alt="Supplied MetaMask activity screenshot" width="420"><br><sub>MetaMask activity</sub></td>
+  </tr>
+  <tr>
+    <td colspan="2"><img src="docs/screenshots/provided-metamask-wallet.png" alt="Supplied MetaMask wallet screenshot" width="420"><br><sub>MetaMask wallet</sub></td>
+  </tr>
+</table>
 
 ## Features
 

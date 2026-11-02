@@ -6,3 +6,6 @@ frontend/dist
 .env
 backend/contract.json
 types/
+
+# Original user screenshots can contain identifying details; publish only redacted copies.
+docs/screenshots/local-only/

@@ -118,6 +118,8 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 .topbar .btn { flex-shrink: 0; white-space: nowrap; }
 .role-chip, .wallet-chip { display: inline-flex; min-height: 36px; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid rgba(224,233,228,.95); border-radius: 999px; color: #53625a; background: rgba(255,255,255,.66); font-size: .78rem; font-weight: 600; }
 .wallet-chip { color: #506159; }
+.demo-banner { display: grid; gap: 3px; margin: 0 0 20px; padding: 13px 16px; border: 1px solid #f0dfb9; border-radius: 14px; color: #725319; background: linear-gradient(110deg, #fff8e9, #fffdf7); font-size: .8rem; line-height: 1.5; }
+.demo-banner strong { font-size: .84rem; }
 .page-heading { margin: 0; font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: clamp(1.65rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -.065em; line-height: 1.15; }
 .page-transition { animation: rise-in .45s both; }
 .welcome-line { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin: 0 0 21px; animation: rise-in .55s both; }
@@ -213,6 +215,8 @@ tbody tr:hover { background: rgba(237,248,242,.66); }
 .login-fields { display: grid; gap: 13px; }
 .login-fields .btn { width: 100%; margin-top: 4px; }
 .login-footnote { margin: 18px 0 0; color: #9aa49f; font-size: .72rem; text-align: center; }
+.demo-credentials { margin: 18px 0 0; padding: 11px; border: 1px solid #f0dfb9; border-radius: 12px; color: #725319; background: #fff8e9; font-size: .78rem; line-height: 1.55; text-align: center; }
+.demo-credentials strong { color: #4e3912; }
 .muted { color: var(--muted); }
 .good { color: #127052; }
 .bad { color: var(--danger); }

@@ -3,6 +3,7 @@ node_modules
 artifacts
 cache
 frontend/dist
+frontend/dist-demo
 .env
 backend/contract.json
 types/

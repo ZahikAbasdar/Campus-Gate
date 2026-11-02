@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { BrowserProvider, Contract } from "ethers";
 import { api } from "./api.js";
 
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === "true";
 const fmt = (s) => new Date(s * 1000).toLocaleString();
 const pages = {
   gate: { title: "Gate activity", subtitle: "A clear view of every arrival and departure." },
-  admin: { title: "Vehicle registry", subtitle: "Manage campus access with a secure, verified record." },
-  logs: { title: "Movement history", subtitle: "Explore recent gate activity across your campus." },
-  verify: { title: "Ledger verification", subtitle: "Compare a database record with its on-chain proof." },
+  admin: { title: "Vehicle registry", subtitle: DEMO_MODE ? "Browse fictional vehicle records in read-only mode." : "Manage campus access with a secure, verified record." },
+  logs: { title: "Movement history", subtitle: DEMO_MODE ? "Explore fictional sample activity from the demo dataset." : "Explore recent gate activity across your campus." },
+  verify: { title: DEMO_MODE ? "Sample record preview" : "Ledger verification", subtitle: DEMO_MODE ? "View a sample comparison; no live verification is performed." : "Compare a database record with its on-chain proof." },
 };
 
 function Icon({ name, size = 18 }) {
@@ -80,7 +81,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (!window.ethereum?.on) return;
+    if (DEMO_MODE || !window.ethereum?.on) return;
     const disconnect = () => setWallet(null);
     window.ethereum.on("accountsChanged", disconnect);
     window.ethereum.on("chainChanged", disconnect);
@@ -90,7 +91,7 @@ export default function App() {
     };
   }, []);
 
-  if (!auth) return <Login onLogin={login} />;
+  if (!auth) return <Login onLogin={login} demoMode={DEMO_MODE} />;
   const connect = async () => {
     setWalletMessage("");
     try {
@@ -123,8 +124,8 @@ export default function App() {
           </nav>
           <div className="sidebar-bottom">
             <div className="chain-card">
-              <div className="chain-card-title"><span className="live-dot" />Protected ledger</div>
-              <p>Every movement is verified and anchored to your campus chain.</p>
+              <div className="chain-card-title"><span className="live-dot" />{DEMO_MODE ? "Sample dataset" : "Protected ledger"}</div>
+              <p>{DEMO_MODE ? "Fictional sample records for a read-only product preview." : "Every movement is verified and anchored to your campus chain."}</p>
             </div>
           </div>
         </aside>
@@ -133,16 +134,18 @@ export default function App() {
           <header className="topbar">
             <span className="crumb">Campus operations&nbsp; / &nbsp;{page.title}</span>
             <div className="topbar-actions">
-              <span className="role-chip"><span className="live-dot" />{auth.role === "admin" ? "Administrator" : "Gate guard"}</span>
-              {wallet ? (
+              <span className="role-chip"><span className="live-dot" />{DEMO_MODE ? "Read-only preview" : auth.role === "admin" ? "Administrator" : "Gate guard"}</span>
+              {!DEMO_MODE && (wallet ? (
                 <span className="wallet-chip"><Icon name="wallet" size={15} />{wallet.account.slice(0, 6)}…{wallet.account.slice(-4)}</span>
               ) : (
                 <button className="btn btn-wallet" onClick={connect}><Icon name="wallet" size={16} />Connect wallet</button>
-              )}
-              {wallet && <button className="btn btn-wallet" onClick={connect}><Icon name="wallet" size={16} />Switch</button>}
+              ))}
+              {!DEMO_MODE && wallet && <button className="btn btn-wallet" onClick={connect}><Icon name="wallet" size={16} />Switch</button>}
               <button className="btn btn-link sign-out" aria-label="Sign out" onClick={() => { setWallet(null); setWalletMessage(""); setTab("gate"); setAuth(null); }}><Icon name="logout" size={15} /><span className="sign-out-label">Sign out</span></button>
             </div>
           </header>
+
+          {DEMO_MODE && <div className="demo-banner" role="note"><strong>Read-only demo preview</strong><span>All records are fictional samples. No wallet, database, or blockchain is connected; changes are disabled.</span></div>}
 
           <div className="welcome-line">
             <div>
@@ -161,10 +164,10 @@ export default function App() {
             Network roles: {wallet.isAdmin ? "administrator" : "not administrator"} · {wallet.isGuard ? "gate guard" : "not gate guard"}
           </p>}
           <div key={tab} className="page-transition">
-            {tab === "gate" && <Gate t={auth.token} wallet={wallet} />}
-            {tab === "admin" && <Admin t={auth.token} wallet={wallet} />}
-            {tab === "logs" && <Logs t={auth.token} />}
-            {tab === "verify" && <Verify t={auth.token} />}
+            {tab === "gate" && <Gate t={auth.token} wallet={wallet} demoMode={DEMO_MODE} />}
+            {tab === "admin" && <Admin t={auth.token} wallet={wallet} demoMode={DEMO_MODE} />}
+            {tab === "logs" && <Logs t={auth.token} demoMode={DEMO_MODE} />}
+            {tab === "verify" && <Verify t={auth.token} demoMode={DEMO_MODE} />}
           </div>
         </main>
       </div>
@@ -172,7 +175,7 @@ export default function App() {
   );
 }
 
-function Login({ onLogin }) {
+function Login({ onLogin, demoMode = false }) {
   const [f, setF] = useState({ username: "", password: "" });
   const [msg, setMsg] = useState("");
   const [pending, setPending] = useState(false);
@@ -191,22 +194,24 @@ function Login({ onLogin }) {
           <span className="brand-mark"><Icon name="campus" size={22} /></span>
           <span><span className="brand-name">Campus Gate</span><span className="brand-caption">Access, in harmony</span></span>
         </div>
-        <span className="section-label">Campus operations</span>
-        <h1>Welcome back.</h1>
-        <p className="login-subtitle">Sign in to manage campus vehicle access and movement records.</p>
+        <span className="section-label">{demoMode ? "Read-only product preview" : "Campus operations"}</span>
+        <h1>{demoMode ? "Explore the demo." : "Welcome back."}</h1>
+        <p className="login-subtitle">{demoMode ? "Sign in with a sample account to explore fictional campus activity. No real services are connected." : "Sign in to manage campus vehicle access and movement records."}</p>
         <form className="login-fields" onSubmit={go}>
           <div className="field"><label htmlFor="username">Username</label><input id="username" autoComplete="username" placeholder="Enter your username" value={f.username} onChange={(e) => setF({ ...f, username: e.target.value })} required /></div>
           <div className="field"><label htmlFor="password">Password</label><input id="password" autoComplete="current-password" placeholder="Enter your password" type="password" value={f.password} onChange={(e) => setF({ ...f, password: e.target.value })} required /></div>
           <button className="btn btn-primary" type="submit" disabled={pending}><Icon name="shield" size={17} />{pending ? "Signing in…" : "Sign in securely"}</button>
         </form>
         {msg && <p className="wallet-message bad" role="alert">{msg}</p>}
-        <p className="login-footnote">Protected with a verifiable campus ledger</p>
+        {demoMode
+          ? <p className="demo-credentials">Try <strong>admin</strong> or <strong>guard</strong> with password <strong>demo123</strong>.</p>
+          : <p className="login-footnote">Protected with a verifiable campus ledger</p>}
       </main>
     </div>
   );
 }
 
-function Gate({ t, wallet }) {
+function Gate({ t, wallet, demoMode = false }) {
   const [plate, setPlate] = useState("");
   const [gate, setGate] = useState(1);
   const [msg, setMsg] = useState(null);
@@ -235,17 +240,17 @@ function Gate({ t, wallet }) {
   return (
     <section className="content-card">
       <div className="card-heading">
-        <div><span className="section-label">Access control</span><h2>Record vehicle movement</h2><p>Choose the gate, enter a plate number, and confirm the record in MetaMask.</p></div>
-        <span className="status-pill"><span className="live-dot" />Gate system ready</span>
+        <div><span className="section-label">{demoMode ? "Sample campus activity" : "Access control"}</span><h2>{demoMode ? "Vehicle movement overview" : "Record vehicle movement"}</h2><p>{demoMode ? "Browse sample vehicles currently on campus. Recording movements is disabled in this preview." : "Choose the gate, enter a plate number, and confirm the record in MetaMask."}</p></div>
+        <span className="status-pill"><span className="live-dot" />{demoMode ? "Sample data" : "Gate system ready"}</span>
       </div>
-      <div className="field-grid">
+      {!demoMode && <div className="field-grid">
         <div className="field"><label htmlFor="vehicle-plate">Vehicle plate</label><input id="vehicle-plate" placeholder="e.g. PB10AB1234" value={plate} onChange={(e) => setPlate(e.target.value)} /></div>
         <div className="field"><label htmlFor="gate-number">Campus gate</label><select id="gate-number" value={gate} onChange={(e) => setGate(e.target.value)}>{[1, 2, 3].map((g) => <option key={g} value={g}>Gate {g}</option>)}</select></div>
-      </div>
-      <div className="action-row">
+      </div>}
+      {!demoMode && <div className="action-row">
         <button className="btn btn-primary" onClick={() => send("entry")} disabled={pending}><Icon name="entry" size={17} />{pending ? "Processing…" : "Record entry"}</button>
         <button className="btn btn-soft" onClick={() => send("exit")} disabled={pending}><Icon name="exit" size={17} />{pending ? "Processing…" : "Record exit"}</button>
-      </div>
+      </div>}
       {msg && <p className={`notice ${msg.ok ? "good" : msg.bad ? "bad" : ""}`} role={msg.bad ? "alert" : "status"}>{msg.t}</p>}
       <div className="divider" />
       <div className="subheading"><h3>Currently on campus</h3><span className="count-badge">{inside.length}</span></div>
@@ -260,10 +265,14 @@ function Gate({ t, wallet }) {
   );
 }
 
-function Admin({ t, wallet }) {
+function Admin({ t, wallet, demoMode = false }) {
   const [f, setF] = useState({ plate: "", ownerName: "", phone: "", department: "" });
   const [msg, setMsg] = useState(null);
   const [pending, setPending] = useState(false);
+  const [vehicles, setVehicles] = useState([]);
+  useEffect(() => {
+    if (demoMode) api("/vehicles", "GET", null, t).then(setVehicles).catch((e) => setMsg({ t: e.message, bad: true }));
+  }, []);
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   const save = async (event) => {
     event.preventDefault();
@@ -282,6 +291,15 @@ function Admin({ t, wallet }) {
       setF({ plate: "", ownerName: "", phone: "", department: "" });
     } catch (e) { setMsg({ t: e.message, bad: true }); } finally { setPending(false); }
   };
+  if (demoMode) return (
+    <section className="content-card">
+      <div className="card-heading"><div><span className="section-label">Fictional sample records</span><h2>Vehicle registry</h2><p>Sample records only. Registration and editing are disabled in this preview.</p></div><span className="status-pill"><Icon name="car" size={14} />Read-only</span></div>
+      {msg && <p className="notice bad" role="alert">{msg.t}</p>}
+      <div className="table-wrap"><table><thead><tr><th>Vehicle</th><th>Owner</th><th>Department</th></tr></thead><tbody>
+        {vehicles.map((v) => <tr key={v._id}><td><span className="plate-tag">{v.plate}</span></td><td>{v.ownerName}</td><td>{v.department}</td></tr>)}
+      </tbody></table></div>
+    </section>
+  );
   return (
     <section className="content-card">
       <div className="card-heading"><div><span className="section-label">Vehicle management</span><h2>Add an authorized vehicle</h2><p>Owner details remain in MongoDB; only a plate hash is written to the chain.</p></div><span className="status-pill"><Icon name="shield" size={14} />Admin access</span></div>
@@ -299,7 +317,7 @@ function Admin({ t, wallet }) {
   );
 }
 
-function Logs({ t }) {
+function Logs({ t, demoMode = false }) {
   const [rows, setRows] = useState([]);
   const [q, setQ] = useState("");
   const [msg, setMsg] = useState("");
@@ -307,7 +325,7 @@ function Logs({ t }) {
   useEffect(() => { load(); }, []);
   return (
     <section className="content-card">
-      <div className="card-heading"><div><span className="section-label">Campus timeline</span><h2>Recent vehicle activity</h2><p>Search and review entry and exit records saved on the blockchain.</p></div><span className="status-pill"><Icon name="blocks" size={14} />Ledger records</span></div>
+      <div className="card-heading"><div><span className="section-label">{demoMode ? "Fictional sample records" : "Campus timeline"}</span><h2>Recent vehicle activity</h2><p>{demoMode ? "Search sample entry and exit records. These are not stored on a blockchain." : "Search and review entry and exit records saved on the blockchain."}</p></div><span className="status-pill"><Icon name="blocks" size={14} />{demoMode ? "Sample records" : "Ledger records"}</span></div>
       <div className="search-row">
         <div className="search-box"><Icon name="search" size={17} /><input aria-label="Search by plate" placeholder="Search by vehicle plate" value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") load(); }} /></div>
         <button className="btn btn-primary" onClick={load}><Icon name="search" size={16} />Search</button>
@@ -316,15 +334,15 @@ function Logs({ t }) {
       {rows.length === 0 ? (
         <div className="empty-state"><div><span className="empty-icon"><Icon name="history" /></span><p>No matching activity yet. Try another plate number.</p></div></div>
       ) : (
-        <div className="table-wrap"><table><thead><tr><th>Log</th><th>Vehicle</th><th>Movement</th><th>Gate</th><th>Time</th><th>Transaction</th></tr></thead><tbody>
-          {rows.map((r) => <tr key={r.logId}><td>#{r.logId}</td><td><span className="plate-tag">{r.plate}</span></td><td><span className={`action-tag ${r.action === "ENTRY" ? "action-entry" : "action-exit"}`}><Icon name={r.action === "ENTRY" ? "entry" : "exit"} size={13} />{r.action}</span></td><td>Gate {r.gateId}</td><td>{fmt(r.timestamp)}</td><td title={r.txHash}>{r.txHash.slice(0, 12)}…</td></tr>)}
+        <div className="table-wrap"><table><thead><tr><th>Log</th><th>Vehicle</th><th>Movement</th><th>Gate</th><th>Time</th><th>{demoMode ? "Source" : "Transaction"}</th></tr></thead><tbody>
+          {rows.map((r) => <tr key={r.logId}><td>#{r.logId}</td><td><span className="plate-tag">{r.plate}</span></td><td><span className={`action-tag ${r.action === "ENTRY" ? "action-entry" : "action-exit"}`}><Icon name={r.action === "ENTRY" ? "entry" : "exit"} size={13} />{r.action}</span></td><td>Gate {r.gateId}</td><td>{fmt(r.timestamp)}</td><td>{demoMode ? "Fictional sample" : <span title={r.txHash}>{r.txHash.slice(0, 12)}…</span>}</td></tr>)}
         </tbody></table></div>
       )}
     </section>
   );
 }
 
-function Verify({ t }) {
+function Verify({ t, demoMode = false }) {
   const [id, setId] = useState("");
   const [res, setRes] = useState(null);
   const [msg, setMsg] = useState("");
@@ -335,15 +353,15 @@ function Verify({ t }) {
   };
   return (
     <section className="content-card">
-      <div className="card-heading"><div><span className="section-label">Integrity check</span><h2>Verify a ledger record</h2><p>Confirm that the cached entry matches the immutable on-chain log.</p></div><span className="status-pill"><Icon name="shield" size={14} />Cryptographic proof</span></div>
+      <div className="card-heading"><div><span className="section-label">{demoMode ? "Sample comparison" : "Integrity check"}</span><h2>{demoMode ? "Explore a sample record" : "Verify a ledger record"}</h2><p>{demoMode ? "Preview a fictional record comparison. No database or blockchain check is performed." : "Confirm that the cached entry matches the immutable on-chain log."}</p></div><span className="status-pill"><Icon name="shield" size={14} />{demoMode ? "Demo only" : "Cryptographic proof"}</span></div>
       <form className="search-row" onSubmit={go}>
         <div className="search-box"><Icon name="blocks" size={17} /><input aria-label="Log number" placeholder="Enter a log number" value={id} onChange={(e) => setId(e.target.value)} required /></div>
         <button className="btn btn-primary" type="submit"><Icon name="verify" size={16} />Verify record</button>
       </form>
       {msg && <p className="notice bad" role="alert">{msg}</p>}
       {res && <div className="verify-box">
-        <p className={`notice ${res.match ? "good" : "bad"}`} role="status">{res.match ? "Verified — the database record matches the blockchain." : "Mismatch — the database record differs from the blockchain."}</p>
-        <pre>{JSON.stringify({ blockchain: res.onChain, database: res.database }, null, 2)}</pre>
+        <p className={`notice ${res.match ? "good" : "bad"}`} role="status">{demoMode ? "Sample comparison complete — this is fictional demo data, not a live verification." : res.match ? "Verified — the database record matches the blockchain." : "Mismatch — the database record differs from the blockchain."}</p>
+        <pre>{JSON.stringify(demoMode ? { sampleRecord: res.sampleRecord, note: res.disclaimer } : { blockchain: res.onChain, database: res.database }, null, 2)}</pre>
       </div>}
     </section>
   );

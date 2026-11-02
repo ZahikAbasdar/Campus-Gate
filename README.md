@@ -152,6 +152,26 @@ Choose the EVM network deliberately and use its official RPC provider. A public-
 
 Verify the selected network, wallet address, contract address, and deployment transaction before using real assets or operational data.
 
+## No-secrets submission preview
+
+The read-only preview uses fictional in-memory records. It does not connect to MongoDB, MetaMask, an RPC endpoint, or a blockchain, and every write request is rejected. Demo sign-in accounts are `admin` or `guard`, both with password `demo123`.
+
+To run this preview on a Render Node web service, use these service commands:
+
+**Build command**
+
+```sh
+npm ci --prefix frontend && VITE_DEMO_MODE=true npm run build --prefix frontend -- --outDir dist-demo
+```
+
+**Start command**
+
+```sh
+node preview-server.js
+```
+
+No environment variables or secrets are required. This preview is separate from the full application deployment below; do not describe its sample comparison as a live database or blockchain verification.
+
 ## Deploying to Render
 
 This project includes [`render.yaml`](render.yaml) for a single **free-tier** Node web service that builds the Solidity ABI and frontend, serves the app and API together, and checks `/api/health`. Free instances may sleep when idle and cold-start on the next visit, have limited monthly resources, and do not provide persistent local storage. Treat this as a test deployment, not a production availability guarantee. Render plan limits can change; confirm current terms in the dashboard.

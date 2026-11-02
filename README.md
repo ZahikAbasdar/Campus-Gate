@@ -10,6 +10,11 @@
 </p>
 
 <p align="center">
+  <a href="https://campus-gate-chain.onrender.com"><strong>🌐 Open the hosted read-only preview</strong></a><br>
+  <sub>Fictional sample data; no live wallet, database, or blockchain is connected.</sub>
+</p>
+
+<p align="center">
   <img src="docs/screenshots/demo-02-admin-gate-activity.png" alt="Campus Gate operations dashboard with fictional demo vehicles" width="880">
 </p>
 
